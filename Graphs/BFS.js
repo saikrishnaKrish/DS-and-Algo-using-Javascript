@@ -33,8 +33,29 @@ class Graph{
 }
 
 // code for BFS
-const BFS=()=>{
+let found=0;
+const BFS=(graph,start,dest)=>{
 
+  let count=graph.count;
+  let visited=new Array(count).fill(false);
+
+  let Queue=[];
+  Queue.push(start);
+  visited[start]=true;
+  while(Queue.length>0){
+    start=Queue.shift();
+
+    if(start==dest){
+        found=1;
+        return found;
+    }
+    for(let i in graph.adjList[start]){
+        if(!visited[i]){
+            visited[i]=true;
+            Queue.push(i);
+        }
+    }
+  }
 }
 
 
@@ -57,4 +78,5 @@ console.log(g)
 let start=A;
 let end=B[0][0];
 
-BFS(start,end)
+BFS(g,start,end)
+console.log('element path found from sraring',found)
