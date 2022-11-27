@@ -25,7 +25,7 @@ class Graph{
             this.addVertex(vertex2)
         }
         this.adjList[vertex1].add(vertex2)
-        this.adjList[vertex2].add(vertex1)
+        // this.adjList[vertex2].add(vertex1)
     }
     getCount(){
         return this.count
@@ -37,19 +37,22 @@ let found=0;
 const BFS=(graph,start,dest)=>{
 
   let count=graph.count;
-  let visited=new Array(count).fill(false);
+  let visited=new Array(count).fill(false); // To track of visited nodes
 
   let Queue=[];
   Queue.push(start);
   visited[start]=true;
+  
   while(Queue.length>0){
     start=Queue.shift();
-
     if(start==dest){
         found=1;
+        console.log('hiiiiiiiii')
         return found;
     }
-    for(let i in graph.adjList[start]){
+  
+    for(let i of graph.adjList[start]){
+  
         if(!visited[i]){
             visited[i]=true;
             Queue.push(i);
@@ -58,6 +61,25 @@ const BFS=(graph,start,dest)=>{
   }
 }
 
+const DFS=(graph,start)=>{
+    let count=graph.count;
+    let visited=new Array(count).fill(false);
+
+    DFS_helper(graph,start,visited);
+}
+
+const DFS_helper=(graph,start,visited)=>{
+    visited[start]=true;
+    // console.log(visited)
+    for(let i of graph.adjList[start]){
+        if(!visited[i]){
+            console.log(i)
+            start=i
+            visited[i]=true;
+            DFS_helper(graph,start,visited)
+        }
+    }
+}
 
 let g= new Graph();
 A = 5
@@ -66,7 +88,9 @@ B = [  [1, 2],
        [2, 4], 
        [3, 4], 
        [5, 2], 
-       [1, 3] ]
+       [3, 4],
+  
+     ]
 
 //Graph creation
 console.log(g) 
@@ -75,8 +99,26 @@ B.forEach(element => {
 });
 console.log(g)
 
-let start=A;
-let end=B[0][0];
 
-BFS(g,start,end)
-console.log('element path found from sraring',found)
+// Searching if there exists a path exists between A and B
+let end=A;
+let start=B[0][0];
+
+// let x=BFS(g,start,end)
+// console.log(found)
+console.log('element path found from starting node',found==0 ? 'not found':'found')
+start=B[0][0];
+console.log('calling DFS')
+// DFS(g,start)//traversing the elements from start
+
+let tot=g.count;
+let checked=new Array(tot).fill(false)
+let s=B[0][0];
+console.log(checked);
+for(let i=1;i<=tot;i++){
+if(!checked[i]){
+    checked[i]=true;
+    console.log('start',s,i)
+    DFS_helper(g,i,checked)
+}
+}
